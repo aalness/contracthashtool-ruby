@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["andy.alness@gmail.com"]
   spec.summary       = %q{Ruby port of contracthashtool}
   spec.description   = %q{Ruby port of Blockstream's contracthashtool for federated peg support}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/aalness/contracthashtool-ruby"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
 
-  spec.add_dependency "bitcoin-ruby"
-  spec.add_dependency "ffi"
+  spec.add_dependency "bitcoin-ruby", "~> 0.0", ">= 0.0.6"
+  spec.add_dependency "ffi", "~> 1.9"
 end
