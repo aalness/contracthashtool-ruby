@@ -2,6 +2,8 @@
 
 Ruby port of https://github.com/Blockstream/contracthashtool
 
+See also: https://blockstream.com/sidechains.pdf
+
 ## Installation
 
 Add this line to your application's Gemfile:
