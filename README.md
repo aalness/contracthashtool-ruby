@@ -35,7 +35,7 @@ nonce, p2sh_address = Contracthashtool.generate(r,a,n)
 puts "nonce: #{nonce}, address: #{p2sh_address}"
 
 key = Contracthashtool.claim(p,a,n)
-puts "new privkey: #{key.to_base58}
+puts "new privkey: #{key.to_base58}"
 ```
 
 ## Contributing
