@@ -12,7 +12,7 @@ module Contracthashtool
     nonce_hex, data = compute_data(payee_address, nonce_hex)
 
     derived_keys = []
-    group = OpenSSL::PKey::EC::Group.new('secp256k1')
+    group = OpenSSL::PKey::EC::Group.new("secp256k1")
     redeem_script.get_multisig_pubkeys.each do |pubkey|
       tweak = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("SHA256"), pubkey, data).to_i(16)
       raise "order exceeded, pick a new nonce" if tweak >= group.order
@@ -38,7 +38,7 @@ module Contracthashtool
 
     pubkey = [key.pub].pack("H*")
     tweak = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("SHA256"), pubkey, data).to_i(16)
-    group = OpenSSL::PKey::EC::Group.new('secp256k1')
+    group = OpenSSL::PKey::EC::Group.new("secp256k1")
     raise "order exceeded, verify parameters" if tweak >= group.order
 
     derived_key = (tweak + key.priv.to_i(16)) % group.order
@@ -64,7 +64,7 @@ module Contracthashtool
   # lifted from https://github.com/GemHQ/money-tree
   module EC_ADD
     extend ::FFI::Library
-    ffi_lib 'ssl'
+    ffi_lib "ssl"
 
     NID_secp256k1 = 714
     POINT_CONVERSION_COMPRESSED = 2

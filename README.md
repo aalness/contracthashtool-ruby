@@ -28,23 +28,50 @@ require 'bitcoin'
 
 Bitcoin.network = :testnet3
 
-r = '5121038695b28f1649c711aedb1fec8df54874334cfb7ddf31ba3132a94d00bdc9715251ae'
-p = 'cMcpaCT6pHkyS4347i4rSmecaQtLiu1eH28NWmBiePn8bi6N4kzh'
-a = 'mqWkEAFeQdrQvyaWNRn5vijPJeiQAjtxL2'
-n = '3a11be476485a6273fad4a0e09117d42'
+# Example parameters from the original tool's usage().
 
-nonce, redeem_script, p2sh_address = Contracthashtool.generate(r,a,n)
-puts "nonce: #{nonce}, address: #{p2sh_address}"
+redeem_script_template = '5121038695b28f1649c711aedb1fec8df54874334cfb7ddf31ba3132a94d00bdc9715251ae'
+payee_address = 'mqWkEAFeQdrQvyaWNRn5vijPJeiQAjtxL2'
+nonce_hex = '3a11be476485a6273fad4a0e09117d42'
+private_key_wif = 'cMcpaCT6pHkyS4347i4rSmecaQtLiu1eH28NWmBiePn8bi6N4kzh'
+
+# Someone wanting to send funds to the sidechain would call this
+# to calculate a P2SH address to send to. They would then send the
+# MDFs (mutually distrusting functionaries) the target address
+# and nonce so they are able to locate the subsequent transaction.
+# The caller would then send the desired amount of coin to the P2SH
+# address to initiate the peg protocol.
+
+nonce, redeem_script, p2sh_address =
+  Contracthashtool.generate(redeem_script_template, payee_address, nonce_hex)
+
+puts "nonce: #{nonce}"
+puts "P2SH address: #{p2sh_address}"
 puts "new redeem script: #{redeem_script}"
 
-key = Contracthashtool.claim(p,a,n)
+# Each MDF would call this to derive a private key to redeem the
+# cross-chain seed transaction after the confirmation period lapses.
+# They would then presumably create and sign a transaction on the
+# sidechain paying the desired amount of sidecoin to the target address.
+# And then we've succeeded in executing one direction of a federated peg.
+# Rinse, wash, and repeat to go back.
+
+key = Contracthashtool.claim(private_key_wif, payee_address, nonce)
 puts "new privkey: #{key.to_base58}"
+
+# Verify homomorpohic derivation was successful.
+
+signature = key.sign_message("derp")
+script = Bitcoin::Script.new([redeem_script].pack("H*"))
+pubkey = Bitcoin::Key.new(nil, script.get_multisig_pubkeys.first.unpack("H*").first)
+raise "nope" unless pubkey.verify_message(signature, "derp")
 ```
 
 <pre>
 <code>
 $ bundle exec ruby test.rb
-nonce: 3a11be476485a6273fad4a0e09117d42, address: 2MvGPFfDXbJZyH79u187VNZbuCgyRBhcdsw
+nonce: 3a11be476485a6273fad4a0e09117d42
+P2SH address: 2MvGPFfDXbJZyH79u187VNZbuCgyRBhcdsw
 new redeem script: 512102944aba05d40d8df1724f8ab2f5f3a58d052d26aedc93e175534cb782becc8ff751ae
 new privkey: cSBD8yM62R82RfbugiGK8Lui9gdMB81NtZBckxe5YxRsDSKySwHK
 </code>
