@@ -52,11 +52,7 @@ puts "P2SH address: #{p2sh_address}"
 puts "new redeem script: #{redeem_script}"
 
 # Each MDF would call this to derive a private key to redeem the
-# cross-chain seed transaction after the confirmation period lapses.
-# They would then presumably create and sign a transaction on the
-# sidechain paying the desired amount of sidecoin to the target address.
-# And then we've succeeded in executing one direction of a federated peg.
-# Rinse, wash, and repeat to go back.
+# locked transaction.
 
 key = Contracthashtool.claim(private_key_wif, payee_address, nonce)
 puts "new privkey: #{key.to_base58}"
