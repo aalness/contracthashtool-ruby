@@ -1,4 +1,4 @@
-# Contracthashtool
+# contracthashtool-ruby
 
 Ruby port of https://github.com/Blockstream/contracthashtool
 
