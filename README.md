@@ -1,4 +1,4 @@
-# contracthashtool-ruby
+# contracthashtool-ruby [![GemVersion](https://badge.fury.io/rb/contracthashtool.svg)](http://badge.fury.io/rb/contracthashtool)
 
 Ruby port of: https://github.com/Blockstream/contracthashtool
 
