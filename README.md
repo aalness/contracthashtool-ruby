@@ -41,10 +41,12 @@ key = Contracthashtool.claim(p,a,n)
 puts "new privkey: #{key.to_base58}"
 ```
 
+<pre>
 <code>
 $ bundle exec ruby test.rb
 nonce: 3a11be476485a6273fad4a0e09117d42, address: 2MvGPFfDXbJZyH79u187VNZbuCgyRBhcdsw
 new redeem script: 512102944aba05d40d8df1724f8ab2f5f3a58d052d26aedc93e175534cb782becc8ff751ae
 new privkey: cSBD8yM62R82RfbugiGK8Lui9gdMB81NtZBckxe5YxRsDSKySwHK
 </code>
+</pre>
 
