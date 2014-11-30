@@ -6,10 +6,10 @@ require "ffi"
 module Contracthashtool
 
   # generate a contract address
-  def self.generate(redeem_script_hex, payee_address, nonce_hex=nil)
+  def self.generate(redeem_script_hex, payee_address_or_ascii, nonce_hex=nil)
     redeem_script = Bitcoin::Script.new([redeem_script_hex].pack("H*"))
     raise "only multisig redeem scripts are currently supported" unless redeem_script.is_multisig?
-    nonce_hex, data = compute_data(payee_address, nonce_hex)
+    nonce_hex, data = compute_data(payee_address_or_ascii, nonce_hex)
 
     derived_keys = []
     group = OpenSSL::PKey::EC::Group.new("secp256k1")
@@ -32,9 +32,9 @@ module Contracthashtool
   end
 
   # claim a contract
-  def self.claim(private_key_wif, payee_address, nonce_hex)
+  def self.claim(private_key_wif, payee_address_or_ascii, nonce_hex)
     key = Bitcoin::Key.from_base58(private_key_wif)
-    data = compute_data(payee_address, nonce_hex)[1]
+    data = compute_data(payee_address_or_ascii, nonce_hex)[1]
 
     pubkey = [key.pub].pack("H*")
     tweak = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("SHA256"), pubkey, data).to_i(16)
@@ -46,19 +46,24 @@ module Contracthashtool
   end
 
   # compute HMAC data
-  def self.compute_data(address, nonce_hex)
+  def self.compute_data(address_or_ascii, nonce_hex)
     nonce = nonce_hex ? [nonce_hex].pack("H32") : SecureRandom.random_bytes(16)
-    hash160 = [Bitcoin.hash160_from_address(address)].pack("H*")
-    address_type = Bitcoin.address_type(address)
-    case address_type
-    when :hash160
-      address_type = "P2PH"
-    when :p2sh
-      address_type = "P2SH"
+    if Bitcoin.valid_address?(address_or_ascii)
+      address_type = Bitcoin.address_type(address_or_ascii)
+      case address_type
+      when :hash160
+        address_type = "P2PH"
+      when :p2sh
+        address_type = "P2SH"
+      else
+        raise "unsuppoorted address type #{address_type}"
+      end
+      contract_bytes = [Bitcoin.hash160_from_address(address_or_ascii)].pack("H*")
     else
-      raise "unsuppoorted address type #{address_type}"
+      address_type = "TEXT"
+      contract_bytes = address_or_ascii
     end
-    [ nonce.unpack("H*")[0], address_type + nonce + hash160 ]
+    [ nonce.unpack("H*")[0], address_type + nonce + contract_bytes ]
   end
 
   # lifted from https://github.com/GemHQ/money-tree
