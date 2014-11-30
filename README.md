@@ -2,7 +2,7 @@
 
 Ruby port of https://github.com/Blockstream/contracthashtool
 
-See also: https://blockstream.com/sidechains.pdf
+See also Appendix A of: https://blockstream.com/sidechains.pdf
 
 ## Installation
 
