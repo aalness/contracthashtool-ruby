@@ -26,9 +26,9 @@ module Contracthashtool
     end
 
     m = redeem_script.get_signatures_required
-    p2sh_script = Bitcoin::Script.to_p2sh_multisig_script(m, *derived_keys)[0]
+    p2sh_script, redeem_script = Bitcoin::Script.to_p2sh_multisig_script(m, *derived_keys)
 
-    [ nonce_hex, Bitcoin::Script.new(p2sh_script).get_p2sh_address ]
+    [ nonce_hex, redeem_script.unpack("H*")[0], Bitcoin::Script.new(p2sh_script).get_p2sh_address ]
   end
 
   # claim a contract

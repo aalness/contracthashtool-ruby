@@ -33,10 +33,18 @@ p = 'cMcpaCT6pHkyS4347i4rSmecaQtLiu1eH28NWmBiePn8bi6N4kzh'
 a = 'mqWkEAFeQdrQvyaWNRn5vijPJeiQAjtxL2'
 n = '3a11be476485a6273fad4a0e09117d42'
 
-nonce, p2sh_address = Contracthashtool.generate(r,a,n)
+nonce, redeem_script, p2sh_address = Contracthashtool.generate(r,a,n)
 puts "nonce: #{nonce}, address: #{p2sh_address}"
+puts "new redeem script: #{redeem_script}"
 
 key = Contracthashtool.claim(p,a,n)
 puts "new privkey: #{key.to_base58}"
 ```
+
+<code>
+$ bundle exec ruby test.rb
+nonce: 3a11be476485a6273fad4a0e09117d42, address: 2MvGPFfDXbJZyH79u187VNZbuCgyRBhcdsw
+new redeem script: 512102944aba05d40d8df1724f8ab2f5f3a58d052d26aedc93e175534cb782becc8ff751ae
+new privkey: cSBD8yM62R82RfbugiGK8Lui9gdMB81NtZBckxe5YxRsDSKySwHK
+</code>
 
