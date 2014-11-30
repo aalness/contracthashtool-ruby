@@ -1,4 +1,4 @@
-# contracthashtool-ruby [![GemVersion](https://badge.fury.io/rb/contracthashtool.svg)](http://badge.fury.io/rb/contracthashtool)
+# contracthashtool-ruby
 
 Ruby port of: https://github.com/Blockstream/contracthashtool
 
@@ -6,7 +6,7 @@ See also Appendix A of: https://blockstream.com/sidechains.pdf
 
 ![Appendix A, Algorithm 1](https://cloud.githubusercontent.com/assets/4391003/5239292/cff58560-7891-11e4-80fc-9f1b7235d19c.png)
 
-## Installation
+## Installation [![GemVersion](https://badge.fury.io/rb/contracthashtool.svg)](http://badge.fury.io/rb/contracthashtool)
 
 Add this line to your application's Gemfile:
 
