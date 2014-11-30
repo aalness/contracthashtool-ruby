@@ -59,7 +59,7 @@ puts "new redeem script: #{redeem_script}"
 key = Contracthashtool.claim(private_key_wif, payee_address, nonce)
 puts "new privkey: #{key.to_base58}"
 
-# Verify homomorpohic derivation was successful.
+# Verify homomorphic derivation was successful.
 
 signature = key.sign_message("derp")
 script = Bitcoin::Script.new([redeem_script].pack("H*"))
