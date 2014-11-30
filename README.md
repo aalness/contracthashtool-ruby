@@ -1,6 +1,6 @@
 # contracthashtool-ruby
 
-Ruby port of https://github.com/Blockstream/contracthashtool
+Ruby port of: https://github.com/Blockstream/contracthashtool
 
 See also Appendix A of: https://blockstream.com/sidechains.pdf
 

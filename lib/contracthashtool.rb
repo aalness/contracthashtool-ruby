@@ -56,7 +56,7 @@ module Contracthashtool
       when :p2sh
         address_type = "P2SH"
       else
-        raise "unsuppoorted address type #{address_type}"
+        raise "unsupported address type #{address_type}"
       end
       contract_bytes = [Bitcoin.hash160_from_address(address_or_ascii)].pack("H*")
     else
