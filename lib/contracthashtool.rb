@@ -15,11 +15,14 @@ module Contracthashtool
     group = OpenSSL::PKey::EC::Group.new("secp256k1")
     redeem_script.get_multisig_pubkeys.each do |pubkey|
       tweak = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("SHA256"), pubkey, data).to_i(16)
-      raise "order exceeded, pick a new nonce" if tweak >= group.order
+      raise "order exceeded, pick a new nonce" if tweak >= group.order.to_i
       tweak = OpenSSL::BN.new(tweak.to_s)
+
       key = Bitcoin::Key.new(nil, pubkey.unpack("H*")[0])
       key = key.instance_variable_get(:@key)
       point = group.generator.mul(tweak).add(key.public_key).to_bn.to_i
+      raise "infinity" if point == 1/0.0
+
       key = Bitcoin::Key.new(nil, point.to_s(16))
       key.instance_eval{ @pubkey_compressed = true }
       derived_keys << key.pub
@@ -39,9 +42,11 @@ module Contracthashtool
     pubkey = [key.pub].pack("H*")
     tweak = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("SHA256"), pubkey, data).to_i(16)
     group = OpenSSL::PKey::EC::Group.new("secp256k1")
-    raise "order exceeded, verify parameters" if tweak >= group.order
+    raise "order exceeded, verify parameters" if tweak >= group.order.to_i
 
-    derived_key = (tweak + key.priv.to_i(16)) % group.order
+    derived_key = (tweak + key.priv.to_i(16)) % group.order.to_i
+    raise "zero" if derived_key == 0
+
     Bitcoin::Key.new(derived_key.to_s(16))
   end
 
