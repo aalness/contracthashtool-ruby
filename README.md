@@ -1,5 +1,5 @@
 
-## this is no longer maintained. support is now included in https://github.com/lian/bitcoin-ruby
+## this is no longer maintained. support is now included in: https://github.com/lian/bitcoin-ruby
 
 # contracthashtool-ruby
 
